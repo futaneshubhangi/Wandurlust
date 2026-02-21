@@ -1,0 +1,182 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+  <div class="col-8 offset-2 mb-5 pb-4 add-form">
+
+    <!-- TITLE -->
+    <h3 class="mb-3 fw-semibold"><%= listing.title %></h3>
+
+    <!-- IMAGE -->
+    <div class="mb-4">
+      <img 
+        src="<%= listing.image.url %>" 
+        class="img-fluid show-img">
+    </div>
+
+    <!-- DETAILS -->
+    <div class="card p-3 mb-4 listing-card">
+      <p>
+        This listing is owned by 
+        <b><%= listing.owner.username %></b>
+      </p>
+
+      <p class="mb-2 text-muted"><%= listing.description %></p>
+
+      <p class="fw-bold mb-1">
+        ₹ <%= listing.price.toLocaleString("en-IN") %>
+      </p>
+
+      <p class="text-muted mb-0">
+        <%= listing.location %>, <%= listing.country %>
+      </p>
+    </div>
+
+    <!-- ACTIONS (ONLY LISTING OWNER) -->
+    <% if (
+      currentUser &&
+      listing.owner &&
+      currentUser._id.toString() === listing.owner._id.toString()
+    ) { %>
+
+      <div class="mb-4">
+        <a href="/listings/<%= listing._id %>/edit"
+           class="btn btn-dark add-btn me-2">
+          Edit
+        </a>
+
+        <form method="POST"
+              action="/listings/<%= listing._id %>?_method=DELETE"
+              class="d-inline">
+          <button class="btn btn-outline-dark">
+            Delete
+          </button>
+        </form>
+      </div>
+
+    <% } %>
+
+    <!-- ================= REVIEWS ================= -->
+    <div class="review-section">
+      <hr>
+
+      <!-- REVIEW SUMMARY -->
+      <div class="review-summary mb-4">
+        <span class="review-summary-rating">
+          <%
+            let total = 0;
+            for (let r of listing.reviews) total += r.rating;
+            let avg = listing.reviews.length
+              ? (total / listing.reviews.length).toFixed(1)
+              : "0.0";
+          %>
+          ★ <%= avg %>
+        </span>
+        <span class="review-summary-count">
+          (<%= listing.reviews.length %> reviews)
+        </span>
+      </div>
+
+      <!-- REVIEW FORM -->
+      <% if (currentUser) { %>
+
+        <h6 class="fw-semibold mb-3">Leave a review</h6>
+
+        <form
+          action="/listings/<%= listing._id %>/reviews"
+          method="POST"
+          class="needs-validation mb-4"
+          novalidate autocomplete="off">
+
+          <fieldset class="starability-slot mb-3">
+            <legend class="form-label">Rating</legend>
+
+            <input type="radio" id="rate5" name="review[rating]" value="1">
+            <label for="rate1">★</label>
+
+            <input type="radio" id="rate4" name="review[rating]" value="2">
+            <label for="rate2">★</label>
+
+            <input type="radio" id="rate3" name="review[rating]" value="3">
+            <label for="rate3">★</label>
+
+            <input type="radio" id="rate2" name="review[rating]" value="4">
+            <label for="rate4">★</label>
+
+            <input type="radio" id="rate1" name="review[rating]" value="5">
+            <label for="rate5">★</label>
+          </fieldset>
+
+          <div class="mb-3">
+            <label class="form-label">Comment</label>
+            <textarea
+              name="review[comment]"
+              rows="4"
+              class="form-control"
+              required></textarea>
+          </div>
+
+          <button class="btn btn-outline-dark">Submit</button>
+        </form>
+
+      <% } %>
+
+      <!-- REVIEWS LIST -->
+      <div class="row justify-content-center">
+        <% for (let review of listing.reviews) { %>
+          <div class="col-md-6">
+            <div class="review-box">
+
+              <div class="review-box-header d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="review-user">
+                    @<%= review.author.username %>
+                  </span>
+
+                  <span class="review-stars ms-2">
+                    <% for (let i = 0; i < review.rating; i++) { %>
+                      ★
+                    <% } %>
+                  </span>
+                </div>
+
+                <!-- ✅ DELETE REVIEW (ONLY REVIEW OWNER) -->
+                <% if (currentUser && review.author._id.equals(currentUser._id)) { %>
+                  <form
+                    method="POST"
+                    action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                    <button class="btn btn-sm btn-outline-danger">
+                      Delete
+                    </button>
+                  </form>
+                <% } %>
+              </div>
+
+              <p class="review-text"><%= review.comment %></p>
+
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/rating.js"></script>
+
+  <!-- ================= MAP SECTION ================= -->
+  <div class="col-8 offset-2 mb-5 pb-4 add-form">
+    <h3>Where you'll be</h3>
+
+    <div
+      id="map"
+      data-lat="<%= listing.geometry.coordinates[1] %>"
+      data-lng="<%= listing.geometry.coordinates[0] %>"
+      data-title="<%= listing.title %>"
+      data-location="<%= listing.location %>"
+      data-country="<%= listing.country %>">
+    </div>
+  </div>
+</div>
+
+<!-- MAP SCRIPT -->
+<script src="/js/map.js"></script>

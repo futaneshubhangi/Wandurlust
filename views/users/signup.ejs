@@ -1,0 +1,55 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-6 col-lg-5 mb-5 pb-4">
+
+    <form method="POST" action="/signup"
+          class="needs-validation add-form"
+          novalidate>
+
+      <h3 class="text-center mb-4">SignUp on Wandurlust</h3>
+
+      <!-- Username -->
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input name="username"
+               placeholder="Choose a username"
+               class="form-control"
+               id="username"
+               required>
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input name="email"
+               type="email"
+               id="email"
+               placeholder="Enter your email"
+               class="form-control"
+               required>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input name="password"
+               type="password"
+               id="password"
+               placeholder="Create a password"
+               class="form-control"
+               required>
+        <div class="invalid-feedback">
+          Please enter a password.
+        </div>
+      </div>
+
+      <button class="btn btn-dark add-btn w-100">Sign Up</button>
+
+    </form>
+
+  </div>
+</div>

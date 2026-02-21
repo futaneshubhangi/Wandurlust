@@ -1,0 +1,133 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+  <div class="col-8 offset-2 mb-5 pb-4">
+
+    <form method="POST"
+          action="/listings/<%= listing._id %>?_method=PUT"
+          class="needs-validation add-form"
+          enctype="multipart/form-data"
+          novalidate>
+
+      <h3>Edit Your Listing</h3>
+
+      <!-- TITLE -->
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input 
+          name="listing[title]" 
+          value="<%= listing.title %>" 
+          class="form-control"
+          type="text"
+          required>
+        <div class="invalid-feedback">
+          Please enter a title.
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea 
+          name="listing[description]" 
+          class="form-control"
+          required><%= listing.description %></textarea>
+        <div class="invalid-feedback">
+          Please enter description.
+        </div>
+      </div>
+
+      <!-- CATEGORY (ADDED ONLY) -->
+      <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select name="listing[category]" class="form-select" required>
+          <option disabled>Select a category</option>
+          <option value="Trending" <%= listing.category === "Trending" ? "selected" : "" %>>Trending</option>
+          <option value="Camping" <%= listing.category === "Camping" ? "selected" : "" %>>Camping</option>
+          <option value="Beach" <%= listing.category === "Beach" ? "selected" : "" %>>Beach</option>
+          <option value="Mountains" <%= listing.category === "Mountains" ? "selected" : "" %>>Mountains</option>
+          <option value="Nature" <%= listing.category === "Nature" ? "selected" : "" %>>Nature</option>
+          <option value="City" <%= listing.category === "City" ? "selected" : "" %>>City</option>
+          <option value="Farms" <%= listing.category === "Farms" ? "selected" : "" %>>Farms</option>
+          <option value="Arctic" <%= listing.category === "Arctic" ? "selected" : "" %>>Arctic</option>
+          <option value="Amazing Tools" <%= listing.category === "Amazing Tools" ? "selected" : "" %>>Amazing Tools</option>
+        </select>
+        <div class="invalid-feedback">
+          Please select a category.
+        </div>
+      </div>
+
+      <!-- ORIGINAL IMAGE -->
+      <div class="mb-3">
+        <label class="form-label">Original Listing Image</label><br>
+        <img 
+          src="<%= originalImageUrl %>" 
+          class="edit-img"
+          alt="original listing image">
+      </div>
+
+      <!-- UPLOAD NEW IMAGE -->
+      <div class="mb-3">
+        <label class="form-label">Upload New Image</label>
+        <input 
+          name="listing[image]" 
+          class="form-control"
+          type="file">
+      </div>
+
+      <!-- PRICE + COUNTRY -->
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label class="form-label">Price</label>
+          <input 
+            name="listing[price]" 
+            value="<%= listing.price %>" 
+            class="form-control"
+            type="number"
+            min="0"
+            required>
+          <div class="invalid-feedback">
+            Please enter valid price.
+          </div>
+        </div>
+
+        <div class="mb-3 col-md-8">
+          <label class="form-label">Country</label>
+          <input 
+            name="listing[country]" 
+            value="<%= listing.country %>" 
+            class="form-control"
+            type="text"
+            required>
+          <div class="invalid-feedback">
+            Please enter country.
+          </div>
+        </div>
+      </div>
+
+      <!-- LOCATION -->
+      <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input 
+          name="listing[location]" 
+          value="<%= listing.location %>" 
+          class="form-control"
+          type="text"
+          required>
+        <div class="invalid-feedback">
+          Please enter location.
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <a href="/listings/<%= listing._id %>" 
+         class="btn btn-outline-secondary me-2">
+        Cancel
+      </a>
+
+      <button class="btn btn-dark add-btn">Update</button>
+
+    </form>
+
+  </div>
+</div>

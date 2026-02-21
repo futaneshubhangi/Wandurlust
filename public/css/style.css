@@ -1,0 +1,587 @@
+/* ================= GLOBAL ================= */
+
+body{
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    background-color: #ffffff;
+    color: #222;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    height: 5rem;
+    background-color: white;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-link{
+    color: #222 !important;
+    font-weight: 500;
+}
+
+.navbar-brand i{
+    color:#fe424d;
+    font-size: 1.6rem;
+}
+
+/* ---------- USER ICON ---------- */
+
+.navbar .user-icon{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    transition: background-color 0.2s ease;
+}
+
+.navbar .user-icon i{
+    font-size: 1rem;
+}
+
+.navbar .user-icon:hover{
+    background-color: #f4f4f4;
+}
+
+/* Dropdown */
+.navbar .dropdown-menu{
+    border-radius: 10px;
+    padding: 0.4rem;
+    border: 1px solid #eee;
+}
+
+.navbar .dropdown-item{
+    font-size: 0.95rem;
+    padding: 8px 14px;
+}
+
+.navbar .dropdown-item:hover{
+    background-color: #f8f8f8;
+}
+
+/* ================= LAYOUT ================= */
+
+.page-wrapper{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content{
+    flex: 1;
+}
+
+/* ================= CARDS ================= */
+
+.listing-card{
+    border: 1px solid #eee;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.listing-card:hover{
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: 0.2s ease;
+}
+
+.card-body{
+    padding: 0 !important;
+}
+
+/* ================= FORMS ================= */
+
+.add-form{
+    margin-bottom: 4rem;
+}
+
+.add-form h3{
+    font-weight: 600;
+}
+
+.add-form input,
+.add-form textarea{
+    border-radius: 8px;
+}
+
+.add-btn{
+    background-color: #fe424d !important;
+    border: none !important;
+}
+
+/* ================= SHOW PAGE ================= */
+
+.show-img{
+    max-height: 20rem;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 1.5rem;
+}
+
+/* ================= REVIEWS ================= */
+
+.review-section{
+    margin-top: 3rem;
+}
+
+.review-box{
+    background-color: #ffffff;
+    border: 1px solid #ededed;
+    border-radius: 16px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.8rem;
+}
+
+.review-box:hover{
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
+}
+
+.review-user{
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1f1f1f;
+}
+
+.review-stars{
+    color: #f4c430;
+    font-size: 0.9rem;
+}
+
+.review-text{
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: #555;
+    margin: 0.8rem 0 1rem 0;
+}
+
+.review-summary-rating{
+    color: #f4c430;
+    font-weight: 600;
+}
+
+/* ================= FOOTER ================= */
+
+.f-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 7rem;
+    background-color: #f2f2f2;
+    gap: 0.4rem;
+}
+
+.f-info-links a{
+    text-decoration: none;
+    color: #222;
+    font-size: 0.9rem;
+}
+
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+
+/* ================= INDEX PAGE ================= */
+
+.index-card{
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.index-img{
+    height: 18rem;
+    object-fit: cover;
+}
+
+.index-card-body{
+    padding: 0.9rem 0.2rem;
+}
+
+.index-title{
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 0.3rem;
+}
+
+.index-price{
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #222;
+    margin: 0;
+}
+
+.price-unit{
+    color: #777;
+    font-weight: 400;
+}
+
+.listing-links{
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block;
+}
+
+/* ================= FILTER BAR ================= */
+
+#filters {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 1.2rem 2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    background-color: #fff;
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.78rem;
+    color: #717171;
+    min-width: 60px;
+}
+
+.filter i {
+    font-size: 1.15rem;
+    margin-bottom: 0.35rem;
+}
+
+.filter:hover,
+.filter.active {
+    color: #000;
+}
+
+/* Hide scrollbar */
+#filters::-webkit-scrollbar { display: none; }
+#filters { scrollbar-width: none; }
+
+/* ================= TAX SWITCH (ONLY FIX HERE) ================= */
+
+.tax-float {
+    margin-left: auto;       /* push to right */
+    margin-right: -0.5rem;   /* small nudge */
+    flex-shrink: 0;
+}
+
+/* REVIEW STAR DEFAULT COLOR */
+.review-stars i {
+    color: #f4c430 !important;   /* yellow by default */
+}
+.review-stars i.fa-regular {
+    color: #d3d3d3;   /* empty = grey */
+}
+
+.review-stars i.fa-solid {
+    color: #f4c430;   /* filled = yellow */
+}
+
+/* ================= LEAFLET MAP STYLING ================= */
+
+#map {
+  height: 360px;              /* REQUIRED for map to show */
+  width: 100%;
+  margin-top: 1rem;
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: #f4f4f4;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* Match Leaflet UI with site font */
+.leaflet-container {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+/* Zoom controls */
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+}
+
+.leaflet-control-zoom a {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-weight: bold;
+}
+
+/* Popup styling */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  padding: 6px;
+}
+
+.leaflet-popup-content {
+  margin: 6px 10px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+/* ===== REVIEW FORM STARS (FINAL, BUG-FREE) ===== */
+
+.starability-slot {
+  display: inline-flex;
+  flex-direction: row-reverse;
+}
+
+/* hide radios */
+.starability-slot input {
+  position: absolute;
+  left: -9999px;
+}
+
+/* default = grey */
+.starability-slot label {
+  font-size: 1.6rem;
+  color: #d3d3d3;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+/* hover preview ONLY when NOT checked */
+.starability-slot input:not(:checked) + label:hover,
+.starability-slot input:not(:checked) + label:hover ~ label {
+  color: #f4c430;
+}
+
+/* checked stars */
+.starability-slot input:checked ~ label {
+  color: #f4c430;
+}
+
+
+/* ================= TAX BAR LAYOUT ================= */
+
+.tax-float {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.tax-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+
+  padding: 0.9rem 1.25rem;
+  min-width: 320px;
+
+  background-color: #fff;
+  border: 1px solid #ebebeb;
+  border-radius: 40px;
+
+  /* ✨ Shadow */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ================= TAX TEXT ================= */
+
+.tax-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.tax-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  color: #222;
+}
+
+.tax-subtitle {
+  font-size: 0.75rem;
+  margin: 0;
+  color: #717171;
+}
+
+/* ================= CURVED AIRBNB SWITCH (FINAL) ================= */
+
+.airbnb-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 28px;
+}
+
+/* hide checkbox */
+.airbnb-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* track */
+.airbnb-slider {
+  position: absolute;
+  inset: 0;
+  background-color: #dcdcdc;
+  border-radius: 9999px;       /* ultra-curve */
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+/* knob */
+.airbnb-slider::before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  top: 3px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: transform 0.25s ease;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+/* ON state */
+.airbnb-switch input:checked + .airbnb-slider {
+  background-color: #222;
+}
+
+.airbnb-switch input:checked + .airbnb-slider::before {
+  transform: translateX(18px);
+}
+
+/* ================= FILTER ROW ================= */
+
+#filters {
+  display: flex;
+  align-items: center;
+}
+
+/* ================= NAVBAR SEARCH ================= */
+
+.navbar-search {
+  width: 100%;
+  max-width: 420px;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.55rem 1rem;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.search-input::placeholder {
+  color: #888;
+}
+
+.search-btn {
+  border: none;
+  background-color: #fff;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+.search-btn i {
+  color: #555;
+}
+
+.search-wrapper:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+/* ================= NAVBAR AUTH BUTTONS ================= */
+
+/* Common nav links */
+.navbar .nav-link {
+  font-weight: 500;
+  color: #222 !important;
+}
+
+/* ================= LOGIN BUTTON ================= */
+
+.navbar .nav-link[href="/login"] {
+  padding: 0.45rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+  margin-right: 0.5rem;
+}
+
+.navbar .nav-link[href="/login"]:hover {
+  background-color: #f4f4f4;
+  border-color: #222;
+}
+
+/* ================= SIGN UP & CREATE LISTING ================= */
+
+.navbar .nav-link[href="/signup"],
+.navbar .nav-link[href="/listings/new"] {
+  padding: 0.45rem 1rem;
+  border: 1px solid #222;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.navbar .nav-link[href="/signup"]:hover,
+.navbar .nav-link[href="/listings/new"]:hover {
+  background-color: #222;
+  color: #fff !important;
+}
+
+/* ================= LOGOUT ================= */
+
+.navbar .nav-link[href="/logout"] {
+  margin-left: 0.5rem;
+  padding: 0.45rem 1rem;
+  border: 1px solid #dc3545;
+  border-radius: 999px;
+  color: #dc3545 !important;
+  transition: all 0.2s ease;
+}
+
+.navbar .nav-link[href="/logout"]:hover {
+  background-color: #dc3545;
+  color: #fff !important;
+}
+/* ================= MOBILE FIXES ================= */
+
+@media (max-width: 768px) {
+
+  /* Navbar search: full width & smaller */
+  .navbar-search {
+    max-width: 100%;
+    margin: 0.6rem 0;
+  }
+
+  .search-wrapper {
+    box-shadow: none;        /* cleaner on mobile */
+    border-radius: 12px;
+  }
+
+  /* Filters row: allow scrolling */
+  #filters {
+    overflow-x: auto;
+    padding: 0.8rem 1rem;
+  }
+
+  /* Tax box: stack nicely */
+  .tax-bar {
+    min-width: unset;
+    width: 100%;
+    padding: 0.7rem 1rem;
+  }
+
+  /* Buttons spacing */
+  .navbar .nav-link {
+    margin: 0.3rem 0;
+  }
+}
