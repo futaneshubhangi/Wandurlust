@@ -1,44 +1,54 @@
 const User = require("../models/user");
 
-// SIGNUP FORM
+// ================= SIGNUP FORM =================
 module.exports.renderSignupForm = (req, res) => {
-  res.render("users/signup.ejs");
+  return res.render("users/signup.ejs");
 };
 
-// SIGNUP
+// ================= SIGNUP =================
 module.exports.signup = async (req, res, next) => {
   try {
+    console.log("📥 Signup request body:", req.body);
+
     const { username, email, password } = req.body;
+
     const newUser = new User({ username, email });
     const registeredUser = await User.register(newUser, password);
 
+    console.log("✅ User created:", registeredUser.username);
+
     req.login(registeredUser, err => {
       if (err) return next(err);
+      console.log("🔐 User logged in after signup");
       req.flash("success", "Welcome to Wanderlust!");
-      res.redirect("/listings");
+      return res.redirect("/listings");
     });
+
   } catch (e) {
+    console.log("❌ Signup error:", e.message);
     req.flash("error", e.message);
-    res.redirect("/signup");
+    return res.redirect("/signup");
   }
 };
 
-// LOGIN FORM
+// ================= LOGIN FORM =================
 module.exports.renderLoginForm = (req, res) => {
-  res.render("users/login.ejs");
+  return res.render("users/login.ejs");
 };
 
-// LOGIN
+// ================= LOGIN =================
+// (kept for reuse, but NOT used in routes now)
 module.exports.login = (req, res) => {
   req.flash("success", "Welcome back!");
   const redirectUrl = res.locals.redirectUrl || "/listings";
-  res.redirect(redirectUrl);
+  return res.redirect(redirectUrl);
 };
 
-// LOGOUT
-module.exports.logout = (req, res) => {
-  req.logout(() => {
+// ================= LOGOUT =================
+module.exports.logout = (req, res, next) => {
+  req.logout(err => {
+    if (err) return next(err);
     req.flash("success", "Logged out successfully!");
-    res.redirect("/listings");
+    return res.redirect("/listings");
   });
 };

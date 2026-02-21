@@ -1,5 +1,5 @@
 const Listing = require("./models/listing");
-const Review = require("./models/review");   // ✅ FIX 1
+const Review = require("./models/review");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
 
@@ -8,16 +8,21 @@ module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.redirectUrl = req.originalUrl;
     req.flash("error", "You must be logged in to continue");
-    return res.redirect("/login");
+    return res.redirect("/login"); // 🔑 RETURN REQUIRED
   }
-  next();
+  return next();
 };
 
 module.exports.saveRedirectUrl = (req, res, next) => {
-  if (req.session.redirectUrl) {
+  // 🔑 STOP if response already sent
+  if (res.headersSent) return next();
+
+  if (req.session && req.session.redirectUrl) {
     res.locals.redirectUrl = req.session.redirectUrl;
+    delete req.session.redirectUrl; // 🔑 VERY IMPORTANT
   }
-  next();
+
+  return next();
 };
 
 // ---------------- AUTHORIZATION ----------------
@@ -35,14 +40,13 @@ module.exports.isOwner = async (req, res, next) => {
     return res.redirect(`/listings/${id}`);
   }
 
-  next();
+  return next();
 };
 
 module.exports.isReviewAuthor = async (req, res, next) => {
   const { id, reviewId } = req.params;
   const review = await Review.findById(reviewId);
 
-  // ✅ FIX 2: safety check
   if (!review) {
     req.flash("error", "Review not found");
     return res.redirect(`/listings/${id}`);
@@ -53,7 +57,7 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     return res.redirect(`/listings/${id}`);
   }
 
-  next();
+  return next();
 };
 
 // ---------------- VALIDATION ----------------
@@ -62,9 +66,9 @@ module.exports.validateListing = (req, res, next) => {
   if (error) {
     const errMsg = error.details.map(el => el.message).join(", ");
     req.flash("error", errMsg);
-    return res.redirect("back"); // ✅ STOP here
+    return res.redirect("back"); // 🔑 STOP here
   }
-  next();
+  return next();
 };
 
 module.exports.validateReview = (req, res, next) => {
@@ -72,7 +76,7 @@ module.exports.validateReview = (req, res, next) => {
   if (error) {
     const errMsg = error.details.map(el => el.message).join(", ");
     req.flash("error", errMsg);
-    return res.redirect("back"); // ✅ STOP here
+    return res.redirect("back"); // 🔑 STOP here
   }
-  next();
+  return next();
 };

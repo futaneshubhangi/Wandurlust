@@ -1,10 +1,14 @@
 if (process.env.NODE_ENV !== "production") {
-    require("dotenv").config();
+  require("dotenv").config();
 }
 
+// ================= IMPORTS =================
 const express = require("express");
 const app = express();
+
 const mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
+
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
@@ -15,17 +19,21 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 
 const session = require("express-session");
-const MongoStore = require("connect-mongo"); // ✅ ONLY THIS
 const flash = require("connect-flash");
 
 // ================= ENV =================
-const dbUrl = process.env.ATLASTDB_URL;
-const SESSION_SECRET = process.env.SECRET|| "mysupersecretcode";
+const dbUrl = process.env.ATLASDB_URL;
+if (!dbUrl) {
+  throw new Error("❌ ATLASDB_URL is missing in environment variables");
+}
 
-// ================= ROUTES =================
-const listingRouter = require("./routes/listing");
-const reviewRouter = require("./routes/review");
-const userRouter = require("./routes/user");
+const SESSION_SECRET = process.env.SECRET || "mysupersecretcode";
+
+// ================= DATABASE =================
+mongoose
+  .connect(dbUrl)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch(err => console.log("❌ MongoDB Connection Error:", err));
 
 // ================= VIEW ENGINE =================
 app.set("view engine", "ejs");
@@ -37,28 +45,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// ================= SESSION STORE (v4 CORRECT) =================
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    secret: SESSION_SECRET,
-    touchAfter: 24 * 3600
-});
-
-store.on("error", (e) => {
-    console.log("SESSION STORE ERROR", e);
-});
-
-app.use(session({
-    store,
+// ================= SESSION (NO connect-mongo) =================
+app.use(
+  session({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        httpOnly: true,
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-        maxAge: 7 * 24 * 60 * 60 * 1000
+      httpOnly: true,
+      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000
     }
-}));
+  })
+);
 
 app.use(flash());
 
@@ -72,36 +71,37 @@ passport.deserializeUser(User.deserializeUser());
 
 // ================= GLOBAL LOCALS =================
 app.use((req, res, next) => {
-    res.locals.currentUser = req.user;
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
-    next();
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
 });
 
 // ================= ROUTES =================
+const listingRouter = require("./routes/listing");
+const reviewRouter = require("./routes/review");
+const userRouter = require("./routes/user");
+
 app.use("/", userRouter);
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 
-// ================= DATABASE =================
-mongoose.connect(dbUrl)
-    .then(() => console.log("✅ Connected to MongoDB"))
-    .catch(err => console.log("❌ Mongo Error:", err));
-
 // ================= 404 =================
-app.use((req, res, next) => {
-    next(new ExpressError(404, "Page Not Found"));
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page Not Found"));
 });
 
-// ================= ERROR HANDLER =================
+// ================= ERROR HANDLER (SAFE) =================
 app.use((err, req, res, next) => {
-    if (res.headersSent) return next(err);
-    const statusCode = err.statusCode || 500;
-    const message = err.message || "Something went wrong";
-    res.status(statusCode).render("error.ejs", { message });
+  if (res.headersSent) return next(err);
+
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Something went wrong";
+  res.status(statusCode).render("error.ejs", { message });
 });
 
 // ================= SERVER =================
-app.listen(8080, () => {
-    console.log("🚀 Listening on port 8080");
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });

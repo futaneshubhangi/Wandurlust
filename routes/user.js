@@ -5,12 +5,17 @@ const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware");
 const userController = require("../controllers/users");
 
-// SIGNUP → GET + POST
+// ================= HOME =================
+router.get("/", (req, res) => {
+  res.redirect("/listings");
+});
+
+// ================= SIGNUP =================
 router.route("/signup")
   .get(userController.renderSignupForm)
   .post(userController.signup);
 
-// LOGIN → GET + POST
+// ================= LOGIN =================
 router.route("/login")
   .get(userController.renderLoginForm)
   .post(
@@ -19,10 +24,14 @@ router.route("/login")
       failureFlash: true,
       failureRedirect: "/login"
     }),
-    userController.login
+    (req, res) => {
+      req.flash("success", "Welcome back!");
+      const redirectUrl = res.locals.redirectUrl || "/listings";
+      return res.redirect(redirectUrl);
+    }
   );
 
-// LOGOUT → single route (no need for router.route)
+// ================= LOGOUT =================
 router.get("/logout", userController.logout);
 
 module.exports = router;
