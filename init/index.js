@@ -1,23 +1,42 @@
-const mongoose=require("mongoose");
-const initData=require("./data.js");
-const Listing=require("../models/listing.js");
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
-main().catch(err => console.log(err));
-async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
+
+const Listing = require("../models/listing");
+const initData = require("./data");
+
+const dbUrl = process.env.ATLASDB_URL;
+
+if (!dbUrl) {
+  throw new Error("❌ ATLASDB_URL not found in .env");
 }
 
-main().then(() =>{
-    console.log("Connected to db");
-}).catch(err =>{
-    console.log(err);
-})
+const ownerId = new mongoose.Types.ObjectId("699963d8649e48b054d72da8"); // MUST exist in users
 
-const initDB=async () =>{
+async function seedDB() {
+  try {
+    await mongoose.connect(dbUrl);
+    console.log("✅ Connected to DB");
+
     await Listing.deleteMany({});
-    initData.data = initData.data.map((obj)=>({...obj,owner:new mongoose.Types.ObjectId("6995b008f35143e13c0af1c9")}));
-    await Listing.insertMany(initData.data);
-    console.log("data was imserted");
+    console.log("🗑️ Old listings deleted");
+
+    const listings = initData.data.map(item => ({
+      ...item,
+      owner: ownerId
+    }));
+
+    await Listing.insertMany(listings);
+    console.log(`🌱 ${listings.length} listings inserted`);
+
+  } catch (err) {
+    console.log("❌ Seed error:", err.message);
+  } finally {
+    await mongoose.connection.close();
+    console.log("🔒 DB connection closed");
+  }
 }
 
-initDB();
+seedDB();
