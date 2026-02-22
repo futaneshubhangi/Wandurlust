@@ -19,46 +19,61 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 
 // ================= ENV =================
 const dbUrl = process.env.ATLASDB_URL;
 if (!dbUrl) {
-  throw new Error("❌ ATLASDB_URL is missing in environment variables");
+  throw new Error("❌ ATLASDB_URL is missing");
 }
 
-const SESSION_SECRET = process.env.SECRET || "mysupersecretcode";
+const SESSION_SECRET =
+  process.env.SESSION_SECRET || "mysupersecretcode";
 
 // ================= DATABASE =================
 mongoose
   .connect(dbUrl)
   .then(() => console.log("✅ Connected to MongoDB"))
-  .catch(err => console.log("❌ MongoDB Connection Error:", err));
+  .catch((err) => console.log("❌ MongoDB Error:", err));
 
 // ================= VIEW ENGINE =================
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
 
-// ================= MIDDLEWARE =================
+// ================= BASIC MIDDLEWARE =================
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// ================= SESSION (NO connect-mongo) =================
+// ================= SESSION STORE =================
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 3600, // 1 day
+});
+
+store.on("error", (e) => {
+  console.log("❌ SESSION STORE ERROR", e);
+});
+
+// ================= SESSION CONFIG =================
 app.use(
   session({
+    store,
+    name: "session",
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    }
+      secure: false, // ✅ IMPORTANT: works on localhost
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    },
   })
 );
 
+// ================= FLASH =================
 app.use(flash());
 
 // ================= PASSPORT =================
@@ -91,13 +106,12 @@ app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });
 
-// ================= ERROR HANDLER (SAFE) =================
+// ================= ERROR HANDLER =================
+// 🔥 TEMP DEBUG ERROR HANDLER (REQUIRED)
 app.use((err, req, res, next) => {
-  if (res.headersSent) return next(err);
-
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Something went wrong";
-  res.status(statusCode).render("error.ejs", { message });
+  console.log("🔥🔥🔥 REAL ERROR 🔥🔥🔥");
+  console.log(err);
+  res.status(500).send(err.message || err);
 });
 
 // ================= SERVER =================

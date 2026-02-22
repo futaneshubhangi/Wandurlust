@@ -5,12 +5,12 @@ const { listingSchema, reviewSchema } = require("./schema.js");
 
 // ---------------- AUTH ----------------
 module.exports.isLoggedIn = (req, res, next) => {
-  if (!req.isAuthenticated()) {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
     req.session.redirectUrl = req.originalUrl;
     req.flash("error", "You must be logged in to continue");
-    return res.redirect("/login"); // 🔑 RETURN REQUIRED
+    return res.redirect("/login");
   }
-  return next();
+  next();
 };
 
 module.exports.saveRedirectUrl = (req, res, next) => {
