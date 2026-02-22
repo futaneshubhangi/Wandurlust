@@ -1,29 +1,59 @@
-/* ================= GLOBAL ================= */
-
-body{
-    font-family: "Plus Jakarta Sans", sans-serif !important;
-    background-color: #ffffff;
-    color: #222;
-}
-
 /* ================= NAVBAR ================= */
 
-.navbar{
-    height: 5rem;
-    background-color: white;
+.navbar {
+    background-color: #fff;
     border-bottom: 1px solid #eee;
+    min-height: 5rem;      /* prevents jump */
+    z-index: 1050;
 }
 
-.nav-link{
+.nav-link {
     color: #222 !important;
     font-weight: 500;
 }
 
-.navbar-brand i{
-    color:#fe424d;
+.navbar-brand i {
+    color: #fe424d;
     font-size: 1.6rem;
 }
 
+/* ================= SEARCH BAR ================= */
+
+.navbar-search {
+    width: 100%;
+    max-width: 420px;
+}
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.6rem 2.5rem 0.6rem 1rem;
+    border-radius: 50px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+.search-btn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    color: #555;
+}
+
+/* ================= MOBILE FIX ================= */
+
+@media (max-width: 767px) {
+    .navbar-search {
+        max-width: 100%;
+    }
+}
 /* ---------- USER ICON ---------- */
 
 .navbar .user-icon{

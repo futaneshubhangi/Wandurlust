@@ -1,31 +1,29 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light border-bottom sticky-top">
-  <div class="container-fluid position-relative">
+  <div class="container-fluid">
 
     <!-- BRAND -->
-    <a class="navbar-brand" href="/listings">
-      <i class="fa-solid fa-location-arrow"></i>
+    <a class="navbar-brand d-flex align-items-center" href="/listings">
+      <i class="fa-solid fa-location-arrow me-2"></i>
+      <span class="fw-semibold">Explore</span>
     </a>
 
     <!-- TOGGLER -->
     <button class="navbar-toggler" type="button"
       data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
       aria-expanded="false"
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <!-- NAVBAR CONTENT -->
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="collapse navbar-collapse" id="navbarNav">
 
-      <!-- LEFT LINKS -->
-      <div class="navbar-nav me-auto">
-        <a class="nav-link" href="/listings">Explore</a>
-      </div>
-
-      <!-- 🔍 SEARCH BAR (CENTER) -->
-      <form class="navbar-search mx-auto" action="/listings" method="GET">
+      <!-- CENTER SEARCH -->
+      <form class="d-flex mx-md-auto my-2 my-md-0 navbar-search"
+            action="/listings"
+            method="GET">
         <div class="search-wrapper">
           <input
             type="text"
@@ -40,8 +38,8 @@
         </div>
       </form>
 
-      <!-- RIGHT AUTH LINKS (NO DROPDOWN, NO ICON) -->
-      <div class="navbar-nav ms-auto align-items-center">
+      <!-- RIGHT LINKS -->
+      <div class="navbar-nav ms-md-auto align-items-md-center">
 
         <% if (!currentUser) { %>
           <a class="nav-link" href="/login">Login</a>
@@ -54,7 +52,6 @@
         <% } %>
 
       </div>
-
     </div>
   </div>
 </nav>

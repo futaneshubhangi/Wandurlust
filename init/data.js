@@ -1,4 +1,4 @@
-const adminOwnerId = "699963d8649e48b054d72da8"; // same admin user _id
+const adminOwnerId = "699963d8649e48b054d72da8";
 
 const listingsWithOwner = [
 
